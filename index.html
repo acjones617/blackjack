@@ -4,18 +4,30 @@
     <link href="styles/app.css" rel="stylesheet" type="text/css" media="screen">
   </head>
   <body>
+    <script id="gameOverTemplate" type="text.html">
+      <div class=end-game>
+        <div class=winner><%= gameOver %></div>
+        <button class='reset-game'>Deal again?</button>
+      </div>
+    </script>
+
+
     <script src="lib/jquery.js"></script>
     <script src="lib/underscore.js"></script>
     <script src="lib/backbone.js"></script>
 
     <script src="compiled/client/models/Card.js"></script>
     <script src="compiled/client/collections/Hand.js"></script>
+    <script src="compiled/client/collections/DealerHand.js"></script>
     <script src="compiled/client/collections/Deck.js"></script>
     <script src="compiled/client/models/App.js"></script>
+    <script src="compiled/client/models/Game.js"></script>
 
     <script src="compiled/client/views/CardView.js"></script>
     <script src="compiled/client/views/HandView.js"></script>
+    <script src="compiled/client/views/GameView.js"></script>
     <script src="compiled/client/views/AppView.js"></script>
+
 
     <script src="compiled/client/main.js"></script>
   </body>
