@@ -10,14 +10,19 @@ class window.Game extends Backbone.Model
 
   gameEnd: (playerBusts) ->
     if playerBusts
-      @set 'gameOverMessage', 'Player busts, dealer wins :('
       @set 'playerWins', false
+      @set 'gameOverMessage', 'Player busts, dealer wins :('
     else
       playerScore = @get('playerHand').score()
       dealerScore = @get('dealerHand').score()
-      gameOverMessage = if playerScore > dealerScore or dealerScore > 21 then 'Player wins!'
-      else if playerScore < dealerScore then 'Dealer wins'
-      else 'tie...?'
+      if playerScore > dealerScore or dealerScore > 21
+        gameOverMessage = 'Player wins!'
+        @set 'playerWins', true
+      else if playerScore < dealerScore
+        gameOverMessage = 'Dealer wins'
+        @set 'playerWins', false
+      else
+        gameOverMessage = 'tie...?'
       @set 'gameOverMessage', gameOverMessage
 
     @trigger 'gameEnd'
