@@ -33,14 +33,15 @@
     };
 
     Game.prototype.gameEnd = function(playerBusts) {
-      var dealerScore, playerScore, winner;
+      var dealerScore, gameOverMessage, playerScore;
       if (playerBusts) {
-        this.set('winner', 'Player busts, dealer wins :(');
+        this.set('gameOverMessage', 'Player busts, dealer wins :(');
+        this.set('playerWins', false);
       } else {
         playerScore = this.get('playerHand').score();
         dealerScore = this.get('dealerHand').score();
-        winner = playerScore > dealerScore || dealerScore > 21 ? 'Player wins!' : playerScore < dealerScore ? 'Dealer wins' : 'tie...?';
-        this.set('winner', winner);
+        gameOverMessage = playerScore > dealerScore || dealerScore > 21 ? 'Player wins!' : playerScore < dealerScore ? 'Dealer wins' : 'tie...?';
+        this.set('gameOverMessage', gameOverMessage);
       }
       return this.trigger('gameEnd');
     };

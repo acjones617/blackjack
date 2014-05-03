@@ -6,11 +6,17 @@
   <body>
     <script id="gameOverTemplate" type="text.html">
       <div class=end-game>
-        <div class=winner><%= gameOver %></div>
+        <div class=winner><%= gameEnd %></div>
         <button class='reset-game'>Deal again?</button>
       </div>
     </script>
 
+    <script id="scoreTemplate" type="text.html">
+      <div class=score>
+        <div class=player>Player Wins: <%= playerWins %></div>
+        <div class=dealer>Dealer Wins: <%= dealerWins %></div>
+      </div>
+    </script>
 
     <script src="lib/jquery.js"></script>
     <script src="lib/underscore.js"></script>

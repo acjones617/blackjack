@@ -12,26 +12,40 @@
 
     AppView.prototype.template = _.template($('#gameOverTemplate').html());
 
+    AppView.prototype.scoreTemplate = _.template($('#scoreTemplate').html());
+
     AppView.prototype.initialize = function() {
-      this.model.on('change:gameOver', (function(_this) {
+      this.model.on('change:gameEnd', (function(_this) {
         return function() {
-          return _this.render();
+          return _this.renderEndGame();
         };
       })(this));
-      return this.newGame();
+      this.newGame();
+      return this.renderScore();
     };
 
     AppView.prototype.newGame = function() {
       var gameView;
       this.$el.html('');
+      this.model.newGame();
       gameView = new GameView({
         model: this.model.get('game')
       });
       return this.$el.append(gameView.$el);
     };
 
-    AppView.prototype.render = function() {
-      return this.$el.append(this.template(this.model.toJSON()));
+    AppView.prototype.renderScore = function() {
+      return this.$el.append(this.scoreTemplate(this.model.toJSON()));
+    };
+
+    AppView.prototype.renderEndGame = function() {
+      this.$el.append(this.scoreTemplate(this.model.toJSON()));
+      this.$el.append(this.template(this.model.toJSON()));
+      return $('.reset-game').on('click', (function(_this) {
+        return function() {
+          return _this.newGame();
+        };
+      })(this));
     };
 
     return AppView;

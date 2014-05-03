@@ -11,13 +11,31 @@
     }
 
     App.prototype.initialize = function() {
+      this.set('playerWins', 0);
+      this.set('dealerWins', 0);
+      return this.newGame();
+    };
+
+    App.prototype.newGame = function() {
       var game;
       this.set('game', game = new Game());
       return this.get('game').on('gameEnd', (function(_this) {
         return function() {
-          return _this.set('gameOver', _this.get('game').get('winner'));
+          return _this.updateScore();
         };
       })(this));
+    };
+
+    App.prototype.updateScore = function() {
+      var playerWins;
+      playerWins = this.get('game').get('playerWins');
+      if (playerWins) {
+        this.set('playerWins', this.get('playerWins') + 1);
+      } else if (playerWins === false) {
+        this.set('dealerWins', this.get('dealerWins') + 1);
+      }
+      console.log(this.get('playerWins'));
+      return this.set('gameEnd', this.get('game').get('gameOverMessage'));
     };
 
     return App;
