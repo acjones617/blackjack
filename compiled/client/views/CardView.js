@@ -12,7 +12,7 @@
 
     CardView.prototype.className = 'card';
 
-    CardView.prototype.template = _.template('<%= rankName %> of <%= suitName %>');
+    CardView.prototype.template = _.template('<span class="topleft"><%= rankName %><%= suitName %></span> <span class="bottomright"><%= rankName %><%= suitName %></span>');
 
     CardView.prototype.initialize = function() {
       this.model.on('change', (function(_this) {
@@ -24,7 +24,10 @@
     };
 
     CardView.prototype.render = function() {
-      this.$el.html(this.template(this.model.attributes));
+      if (this.model.get('revealed')) {
+        this.$el.html(this.template(this.model.attributes));
+      }
+      this.$el.addClass(this.model.get('suitName') === '\u2663' || this.model.get('suitName') === '\u2660' ? 'black' : 'red');
       if (!this.model.get('revealed')) {
         return this.$el.addClass('covered');
       }

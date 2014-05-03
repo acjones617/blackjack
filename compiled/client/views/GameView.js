@@ -18,14 +18,15 @@
       },
       "click .stand-button": function() {
         return this.model.get('playerHand').stand();
-      },
-      "click .reset-game": function() {
-        return this.model.restart();
       }
     };
 
     GameView.prototype.initialize = function() {
       return this.render();
+    };
+
+    GameView.prototype.disable = function() {
+      return this.$el.find('button').attr('disabled', true);
     };
 
     GameView.prototype.render = function() {

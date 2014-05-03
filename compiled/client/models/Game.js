@@ -35,12 +35,20 @@
     Game.prototype.gameEnd = function(playerBusts) {
       var dealerScore, gameOverMessage, playerScore;
       if (playerBusts) {
-        this.set('gameOverMessage', 'Player busts, dealer wins :(');
         this.set('playerWins', false);
+        this.set('gameOverMessage', 'Player busts, dealer wins :(');
       } else {
         playerScore = this.get('playerHand').score();
         dealerScore = this.get('dealerHand').score();
-        gameOverMessage = playerScore > dealerScore || dealerScore > 21 ? 'Player wins!' : playerScore < dealerScore ? 'Dealer wins' : 'tie...?';
+        if (playerScore > dealerScore || dealerScore > 21) {
+          gameOverMessage = 'Player wins!';
+          this.set('playerWins', true);
+        } else if (playerScore < dealerScore) {
+          gameOverMessage = 'Dealer wins';
+          this.set('playerWins', false);
+        } else {
+          gameOverMessage = 'tie...?';
+        }
         this.set('gameOverMessage', gameOverMessage);
       }
       return this.trigger('gameEnd');

@@ -12,34 +12,30 @@
 
     AppView.prototype.template = _.template($('#gameOverTemplate').html());
 
-    AppView.prototype.scoreTemplate = _.template($('#scoreTemplate').html());
-
     AppView.prototype.initialize = function() {
-      this.model.on('change:gameEnd', (function(_this) {
+      var scoreView;
+      this.model.on('gameEnd', (function(_this) {
         return function() {
-          return _this.renderEndGame();
+          _this.renderEndGame();
+          return _this.gameView.disable();
         };
       })(this));
-      this.newGame();
-      return this.renderScore();
+      scoreView = new ScoreView({
+        model: this.model
+      });
+      return this.newGame();
     };
 
     AppView.prototype.newGame = function() {
-      var gameView;
       this.$el.html('');
       this.model.newGame();
-      gameView = new GameView({
+      this.gameView = new GameView({
         model: this.model.get('game')
       });
-      return this.$el.append(gameView.$el);
-    };
-
-    AppView.prototype.renderScore = function() {
-      return this.$el.append(this.scoreTemplate(this.model.toJSON()));
+      return this.$el.append(this.gameView.$el);
     };
 
     AppView.prototype.renderEndGame = function() {
-      this.$el.append(this.scoreTemplate(this.model.toJSON()));
       this.$el.append(this.template(this.model.toJSON()));
       return $('.reset-game').on('click', (function(_this) {
         return function() {
@@ -49,6 +45,41 @@
     };
 
     return AppView;
+
+  })(Backbone.View);
+
+  window.ScoreView = (function(_super) {
+    __extends(ScoreView, _super);
+
+    function ScoreView() {
+      return ScoreView.__super__.constructor.apply(this, arguments);
+    }
+
+    ScoreView.prototype.template = _.template($('#scoreTemplate').html());
+
+    ScoreView.prototype.initialize = function() {
+      console.log('whatup');
+      this.model.on('change:playerWins', (function(_this) {
+        return function() {
+          return _this.render();
+        };
+      })(this));
+      this.model.on('change:dealerWins', (function(_this) {
+        return function() {
+          return _this.render();
+        };
+      })(this));
+      this.render();
+      return $('body').prepend(this.$el);
+    };
+
+    ScoreView.prototype.render = function() {
+      console.log('scoreview');
+      this.$el.html('');
+      return this.$el.append(this.template(this.model.toJSON()));
+    };
+
+    return ScoreView;
 
   })(Backbone.View);
 
