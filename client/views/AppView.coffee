@@ -1,24 +1,40 @@
 class window.AppView extends Backbone.View
 
   template: _.template $('#gameOverTemplate').html()
-  scoreTemplate: _.template $('#scoreTemplate').html()
+
 
   initialize: ->
-    @model.on('change:gameEnd', => @renderEndGame())
+    @model.on('gameEnd', =>
+      @renderEndGame()
+      @gameView.disable())
+    scoreView = new ScoreView(model: @model)
     @newGame()
-    @renderScore()
 
   newGame: ->
     @$el.html('')
     @model.newGame();
-    gameView = new GameView(model: @model.get 'game')
-    @$el.append gameView.$el
+    @gameView = new GameView(model: @model.get 'game')
+    @$el.append @gameView.$el
 
-  renderScore: ->
-    @$el.append @scoreTemplate @model.toJSON()
 
   renderEndGame: ->
-    @$el.append @scoreTemplate @model.toJSON()
     @$el.append @template @model.toJSON()
     $('.reset-game').on 'click', => @newGame()
+
+
+class window.ScoreView extends Backbone.View
+
+  template: _.template $('#scoreTemplate').html()
+
+  initialize: ->
+    console.log('whatup')
+    @model.on('change:playerWins', => @render())
+    @model.on('change:dealerWins', => @render())
+    @render()
+    $('body').prepend(@$el)
+
+  render: ->
+    console.log('scoreview')
+    @$el.html('')
+    @$el.append @template @model.toJSON()
 
