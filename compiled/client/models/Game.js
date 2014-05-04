@@ -10,9 +10,9 @@
       return Game.__super__.constructor.apply(this, arguments);
     }
 
-    Game.prototype.initialize = function() {
-      var deck;
-      this.set('deck', deck = new Deck());
+    Game.prototype.initialize = function(deck) {
+      deck || (deck = new Deck());
+      this.set('currentDeck', deck);
       this.set('playerHand', deck.dealPlayer());
       this.set('dealerHand', deck.dealDealer());
       this.get('playerHand').on('stand', (function(_this) {

@@ -11,29 +11,43 @@
     }
 
     App.prototype.initialize = function() {
+      this.set('chips', 1000);
+      this.set('bet', 10);
       this.set('playerWins', 0);
       this.set('dealerWins', 0);
       return this.newGame();
     };
 
-    App.prototype.newGame = function() {
-      var game;
-      this.set('game', game = new Game());
-      return this.get('game').on('gameEnd', (function(_this) {
+    App.prototype.newGame = function(betSize) {
+      var previousDeck;
+      this.set('bet', betSize);
+      console.log(this.get('deckUse'), this.get('currentDeck'));
+      if (this.get('deckUse') <= 4) {
+        previousDeck = this.get('game').get('currentDeck');
+        this.set('game', new Game(this.get('currentDeck')));
+        this.set('deckUse', this.get('deckUse') + 1);
+      } else {
+        this.set('game', new Game());
+        this.set('deckUse', 1);
+      }
+      this.get('game').on('gameEnd', (function(_this) {
         return function() {
           _this.updateScore();
           _this.set('gameEnd', _this.get('game').get('gameOverMessage'));
           return _this.trigger('gameEnd');
         };
       })(this));
+      return this.set('currentDeck', this.get('game').get('currentDeck'));
     };
 
     App.prototype.updateScore = function() {
       var playerWins;
       playerWins = this.get('game').get('playerWins');
       if (playerWins) {
+        this.set('chips', this.get('chips') + this.get('bet'));
         return this.set('playerWins', this.get('playerWins') + 1);
       } else if (playerWins === false) {
+        this.set('chips', this.get('chips') - this.get('bet'));
         return this.set('dealerWins', this.get('dealerWins') + 1);
       }
     };

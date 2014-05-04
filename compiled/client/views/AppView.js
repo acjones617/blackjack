@@ -10,13 +10,15 @@
       return AppView.__super__.constructor.apply(this, arguments);
     }
 
-    AppView.prototype.template = _.template($('#gameOverTemplate').html());
+    AppView.prototype.template = _.template($('#restartTemplate').html());
+
+    AppView.prototype.templateEndGame = _.template($('#gameOverTemplate').html());
 
     AppView.prototype.initialize = function() {
       var scoreView;
       this.model.on('gameEnd', (function(_this) {
         return function() {
-          _this.renderEndGame();
+          _this.render();
           return _this.gameView.disable();
         };
       })(this));
@@ -27,59 +29,42 @@
     };
 
     AppView.prototype.newGame = function() {
+      var betSize;
+      betSize = +$('.bet').val() || 10;
       this.$el.html('');
-      this.model.newGame();
+      this.model.newGame(betSize);
       this.gameView = new GameView({
         model: this.model.get('game')
       });
       return this.$el.append(this.gameView.$el);
     };
 
-    AppView.prototype.renderEndGame = function() {
-      this.$el.append(this.template(this.model.toJSON()));
-      return $('.reset-game').on('click', (function(_this) {
-        return function() {
-          return _this.newGame();
-        };
-      })(this));
+    AppView.prototype.render = function(bankrupt) {
+      if (this.model.get('chips') > 0) {
+        this.$el.append(this.template(this.model.toJSON()));
+        $('.reset-game').on('click', (function(_this) {
+          return function() {
+            return _this.newGame();
+          };
+        })(this));
+        $('.bet').focus();
+        return $('.bet').on('keyup', (function(_this) {
+          return function(e) {
+            if (e.which === 13) {
+              return _this.newGame();
+            }
+          };
+        })(this));
+      } else {
+        return setTimeout((function(_this) {
+          return function() {
+            return _this.$el.append(_this.templateEndGame, 1500);
+          };
+        })(this));
+      }
     };
 
     return AppView;
-
-  })(Backbone.View);
-
-  window.ScoreView = (function(_super) {
-    __extends(ScoreView, _super);
-
-    function ScoreView() {
-      return ScoreView.__super__.constructor.apply(this, arguments);
-    }
-
-    ScoreView.prototype.template = _.template($('#scoreTemplate').html());
-
-    ScoreView.prototype.initialize = function() {
-      console.log('whatup');
-      this.model.on('change:playerWins', (function(_this) {
-        return function() {
-          return _this.render();
-        };
-      })(this));
-      this.model.on('change:dealerWins', (function(_this) {
-        return function() {
-          return _this.render();
-        };
-      })(this));
-      this.render();
-      return $('body').prepend(this.$el);
-    };
-
-    ScoreView.prototype.render = function() {
-      console.log('scoreview');
-      this.$el.html('');
-      return this.$el.append(this.template(this.model.toJSON()));
-    };
-
-    return ScoreView;
 
   })(Backbone.View);
 
