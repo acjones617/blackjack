@@ -13,6 +13,7 @@ class window.GameView extends Backbone.View
   initialize: ->
     @render()
 
+
   disable: ->
     @$el.find('button').attr('disabled', true)
 
