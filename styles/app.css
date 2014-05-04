@@ -42,7 +42,7 @@
   overflow: auto;
 }
 
-.end-game {
+.restart-game {
   position: fixed;
   top: 45%;
   left: 30%;
@@ -52,6 +52,18 @@
   border: 3px solid black;
   border-radius: 10px;
   text-align: center;
+}
+
+.end-game {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 15% 15%;
+  font-size: 100px;
+  color: white;
+  background: black;
+  height: 10000px;
+  width: 10000px;
 }
 
 .reset-game {
