@@ -1,40 +1,30 @@
 class window.AppView extends Backbone.View
 
-  template: _.template $('#gameOverTemplate').html()
+  template: _.template $('#restartTemplate').html()
 
+  templateEndGame: _.template $('#gameOverTemplate').html()
 
   initialize: ->
     @model.on('gameEnd', =>
-      @renderEndGame()
+      @render()
       @gameView.disable())
     scoreView = new ScoreView(model: @model)
     @newGame()
 
   newGame: ->
+    betSize = +$('.bet').val() or 10;
     @$el.html('')
-    @model.newGame();
+    @model.newGame(betSize);
     @gameView = new GameView(model: @model.get 'game')
     @$el.append @gameView.$el
 
 
-  renderEndGame: ->
-    @$el.append @template @model.toJSON()
-    $('.reset-game').on 'click', => @newGame()
-
-
-class window.ScoreView extends Backbone.View
-
-  template: _.template $('#scoreTemplate').html()
-
-  initialize: ->
-    console.log('whatup')
-    @model.on('change:playerWins', => @render())
-    @model.on('change:dealerWins', => @render())
-    @render()
-    $('body').prepend(@$el)
-
-  render: ->
-    console.log('scoreview')
-    @$el.html('')
-    @$el.append @template @model.toJSON()
-
+  render: (bankrupt) ->
+    if @model.get('chips') > 0
+      @$el.append @template @model.toJSON()
+      $('.reset-game').on 'click', => @newGame()
+      $('.bet').focus()
+      $('.bet').on 'keyup', (e) =>
+        @newGame() if e.which is 13
+    else
+      setTimeout( => @$el.append @templateEndGame, 1500)
