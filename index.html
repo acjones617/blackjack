@@ -4,17 +4,26 @@
     <link href="styles/app.css" rel="stylesheet" type="text/css" media="screen">
   </head>
   <body>
-    <script id="gameOverTemplate" type="text.html">
-      <div class=end-game>
+    <script id="restartTemplate" type="text.html">
+      <div class=restart-game>
         <div class=winner><%= gameEnd %></div>
-        <button class='reset-game'>Deal again?</button>
+        <button class="reset-game">Deal again?</button>
+        Bet size? <input type="number" class="bet" value='10' autofocus></input>
       </div>
     </script>
 
     <script id="scoreTemplate" type="text.html">
       <div class=score>
-        <div class=player>Player Wins: <%= playerWins %></div>
-        <div class=dealer>Dealer Wins: <%= dealerWins %></div>
+        <div class="betSize">Bet: <%= bet %></div>
+        <div class="pot">Player Chips: <%= chips %></div>
+        <div class="player">Player Wins: <%= playerWins %></div>
+        <div class="dealer">Dealer Wins: <%= dealerWins %></div>
+      </div>
+    </script>
+
+    <script id="gameOverTemplate" type="text.html">
+      <div class="end-game">
+        GAME OVER. BOOM
       </div>
     </script>
 
@@ -32,8 +41,9 @@
     <script src="compiled/client/views/CardView.js"></script>
     <script src="compiled/client/views/HandView.js"></script>
     <script src="compiled/client/views/GameView.js"></script>
+    <script src="compiled/client/views/DeckView.js"></script>
+    <script src="compiled/client/views/ScoreView.js"></script>
     <script src="compiled/client/views/AppView.js"></script>
-
 
     <script src="compiled/client/main.js"></script>
   </body>
